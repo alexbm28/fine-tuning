@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "pdf_size_mm": [
+    149.99999576144748,
+    98.00000440809461
+  ],
+  "png_pixels": [
+    3543,
+    2314
+  ],
+  "png_dpi": [
+    599.9988,
+    599.9988
+  ],
+  "pdf_svg_embedded_raster_images": 0,
+  "same_pdf_png_from_another_working_directory": true,
+  "source_cells_unchanged": true,
+  "latex_insertion_width_mm": 150,
+  "latex_warnings_or_overfull_boxes": 0,
+  "visual_inspection": "Figure and complete LaTeX insertion viewed at intended 150 mm text width; no label overlaps or clipping."
+}

@@ -1,0 +1,9 @@
+\textbf{Compute allocation under a shared budget.}
+\textbf{A} schematically depicts successive training stages from zero through the pretraining checkpoint; \textbf{B,C} show numerical full-batch GD evaluations for two fixed instances with pretraining/fine-tuning sample sizes $(n,n')=(80,320)$ and $(320,80)$.
+Both use $B=65{,}536\times80d$, $d=400$.
+The achieved update $\boldsymbol{\Delta}_{k,\ell}=\mathbf{w}'_{\ell}-\mathbf{w}_k$ approximates the fixed ideal update $\boldsymbol{\Delta}=\widehat{\mathbf{w}}'-\widehat{\mathbf{w}}$, whose endpoints minimise the two fixed empirical objectives.
+The squared update error $\lVert\boldsymbol{\Delta}_{k,\ell}-\boldsymbol{\Delta}\rVert_{\mathbf{H}'}^2$ uses the fine-tuning Hessian as common geometry across allocations within each instance.
+The horizontal coordinate is the percentage of compute spent on pretraining, $100c_pk/B$; black dots identify best feasible splits.
+At $0\%$, fine-tuning starts from zero; at $100\%$, pretraining alone yields zero achieved update.
+Sample sizes affect both empirical objectives and iteration costs.
+See Section~4.5.4 for experimental details.

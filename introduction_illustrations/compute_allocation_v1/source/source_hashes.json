@@ -1,0 +1,14 @@
+{
+  "original_compute_cell.py": {
+    "sha256": "e0a2b2a47ec902c7706052a49c28db181dc10d5d8de9985aff5f2c6b0e8ef42d",
+    "user_upload": "Pasted text.txt"
+  },
+  "original_plot_cell.py": {
+    "sha256": "d8a9394fa5e1768a2b1e282c243b30f25a1757ac91457e475389599e8dc44f32",
+    "user_upload": "Pasted text.txt"
+  },
+  "figure_request.txt": {
+    "sha256": "143e03cf8373c8d1e849037a95d83c88a48b416bc50f58ba6ed160257ec2e0a2",
+    "user_upload": "Pasted text.txt"
+  }
+}

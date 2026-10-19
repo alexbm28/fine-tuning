@@ -1,0 +1,72 @@
+{
+  "figure_width_mm": 150.0,
+  "figure_height_mm": 98.0,
+  "font": "Liberation Serif; Computer Modern mathematics",
+  "png_dpi": 600,
+  "x_limits": [
+    0,
+    100
+  ],
+  "shared_log10_y_limits": [
+    -37.024903787120856,
+    1.1326561617703748
+  ],
+  "normalisation": "None",
+  "clipping_or_flooring": "None",
+  "curve_path_simplification": false,
+  "optimum_label_curve_intersections": 0,
+  "label_bounds_display_pixels": [
+    [
+      222.2726377952756,
+      113.36429133858269,
+      126.625,
+      21.25
+    ],
+    [
+      555.5501968503937,
+      130.1361811023622,
+      135.5,
+      21.25
+    ]
+  ],
+  "axis_scales": [
+    "log",
+    "log"
+  ],
+  "source_metadata_sha256": "15b9e663733e5c9b90692063b6788ab2c7a7266bb0afdedee21bf2baabf7c4ed",
+  "source_curves_sha256": "123d781e0060061fb5afa0f34287c6e909f21d68da9672ccd4cbb63df271fc40",
+  "provenance": "Replotted cached results regenerated once from the supplied unchanged original Cell 1. Historical saved arrays were not supplied.",
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8"
+  },
+  "panels": [
+    {
+      "n": 80,
+      "n_prime": 320,
+      "cache_panel_index": 0,
+      "feasible_points": 16385,
+      "t_opt": 1404,
+      "k_star": 5616,
+      "ell_star": 14980,
+      "optimum_percent": 8.5693359375,
+      "displayed_percent": "8.57%",
+      "minimum_squared_update_error": 5.1230754974575846e-36,
+      "minimum_log10_squared_update_error": -35.290469243989435
+    },
+    {
+      "n": 320,
+      "n_prime": 80,
+      "cache_panel_index": 2,
+      "feasible_points": 16385,
+      "t_opt": 12820,
+      "k_star": 12820,
+      "ell_star": 14256,
+      "optimum_percent": 78.2470703125,
+      "displayed_percent": "78.25%",
+      "minimum_squared_update_error": 5.5659101277250996e-33,
+      "minimum_log10_squared_update_error": -32.254463810461225
+    }
+  ]
+}

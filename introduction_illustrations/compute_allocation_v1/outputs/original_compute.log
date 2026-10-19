@@ -1,0 +1,14 @@
+Lanczos n=80: 40 iterations; estimate=0.13151969
+Lanczos n=320: 40 iterations; estimate=0.05185128
+Reference n=80, n'=320: 16,385 allocations checked.
+Reference n=80, n'=80: 65,537 allocations checked.
+Reference n=320, n'=80: 16,385 allocations checked.
+
+Direct-GD checks passed. All estimates were fixed before reference SVDs.
+  n  n_prime  lanczos_percent  leading_exact_percent  two_term_percent  optimum_percent  lanczos_iterations
+ 80      320           8.6632                 8.6923            8.5502           8.5693                  40
+ 80       80          27.5044                27.5779           27.2066          27.2064                  40
+320       80          79.4112                79.9515           77.3167          78.2471                  40
+Percentages are compute allocated to pretraining.
+B excludes estimation overhead; this figure is not a timing comparison.
+Data saved in neurips_figure1_lanczos_data. Rerun only Cell 2 to restyle the figure.

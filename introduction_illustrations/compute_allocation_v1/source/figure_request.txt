@@ -1,0 +1,359 @@
+Create an introductory illustration for my PhD thesis subsection:
+
+“Compute allocation: When to switch training between objectives?”
+
+Use the supplied file pretrain_finetune_chapter_for_codex.pdf, containing
+the current thesis version of “Compute-Optimal Pretrain–Fine-tune in
+Ridge Gradient Descent”, including supplementary material.
+
+Also inspect the existing repository for the script and saved numerical
+results used to produce Figure 4.1 in that chapter.
+
+Read the chapter before implementing the figure, including the model,
+evaluation criterion, relevant results, and experimental details in
+Section 4.5.4. Use the chapter as the source of truth.
+
+PURPOSE
+
+This figure should introduce the COMPUTE-ALLOCATION QUESTION, not repeat
+the detailed comparison of theoretical and numerical predictions in
+the research chapter.
+
+The reader should understand:
+
+1. Pretraining and fine-tuning share one fixed computational budget.
+   Spending more on one stage leaves less for the other.
+
+2. The object being approximated is the UPDATE between the pretraining
+   and fine-tuning optima.
+
+3. Different allocations produce different update errors, and the
+   best allocation can differ between problem instances.
+
+Use real numerical curves from the existing Figure 4.1 experiment.
+Only the diagram explaining the procedure should be schematic.
+
+REUSE THE EXISTING EXPERIMENT
+
+Use these two existing cases from Figure 4.1:
+
+- Left numerical panel: n = 80, n' = 320.
+- Right numerical panel: n = 320, n' = 80.
+
+Omit the middle case n = n' = 80.
+
+Reuse the original data, training parameters, objective values, and
+numerical minimisers wherever available. Do not rerun an expensive
+experiment when its outputs can simply be replotted.
+
+Do not change the seed, budget, penalties, or step sizes to obtain a
+more visually attractive result.
+
+If the original script and numerical data are unavailable, explain
+what is missing and ask for them before claiming to reproduce the
+existing experiment. A matching random seed alone does not guarantee
+identical datasets.
+
+The documented settings, to check against the existing implementation,
+are:
+
+- Dimension d = 400.
+- Ridge penalties gamma = gamma' = 0.05.
+- Step sizes eta = eta' = 0.05.
+- Pretraining initialisation w_0 = 0.
+- Fine-tuning initialisation at the pretraining checkpoint w_k.
+- Per-iteration costs c_p = n*d and c_f = n'*d.
+- The same total budget B = 65,536 * 80*d in both cases.
+- The smaller datasets use the first 80 observations of the
+  corresponding 320-observation datasets.
+- The training budget excludes estimation and plotting overhead.
+
+Consult Section 4.5.4 and the original code for the data-generation
+details. Do not substitute new random draws.
+
+MATHEMATICAL SETUP
+
+The empirical objectives are:
+
+    R_pre(w)  = ||Xw - y||^2/(2n) + gamma*||w||^2/2
+
+    R_fine(w) = ||X'w - y'||^2/(2n') + gamma'*||w||^2/2.
+
+Their unique minimisers are w_hat and w_hat_prime.
+
+For each feasible schedule:
+- Run k pretraining GD iterations from zero, reaching w_k.
+- Run ell fine-tuning iterations from w_k, reaching w'_ell.
+- Enforce c_p*k + c_f*ell = B.
+
+The ideal update is:
+
+    Delta = w_hat_prime - w_hat.
+
+The achieved finite-budget update is:
+
+    Delta_{k,ell} = w'_ell - w_k.
+
+Evaluate:
+
+    f(k,ell) = ||Delta_{k,ell} - Delta||^2_{H'},
+
+where:
+
+    H' = X'^T X'/n' + gamma'*I.
+
+THIS DISTINCTION IS ESSENTIAL
+
+Do not replace this criterion with:
+- ||w'_ell - w_hat_prime||^2;
+- the empirical risk evaluated directly at w'_ell;
+- a test-set prediction error;
+- the distance to the data-generating teacher.
+
+The ideal update Delta is independent of the allocation within each
+fixed problem instance. Do not replace it with w_hat_prime - w_k.
+
+The corresponding empirical excess-risk identity is:
+
+    R_fine(w_hat + Delta_{k,ell}) - R_fine(w_hat_prime)
+      = (1/2) ||Delta_{k,ell} - Delta||^2_{H'}.
+
+Thus, the risk interpretation uses a COMMON ANCHOR w_hat.
+The evaluated model w_hat + Delta_{k,ell} is generally not w'_ell.
+
+Use “update error” in the figure rather than “downstream loss” or
+“generalisation error”.
+
+FIGURE DESIGN
+
+Create one figure with a compact schematic at the top and two numerical
+plots underneath. Match the typography, panel lettering, and general
+visual style of the existing phase-retrieval introduction figure, if its
+script or outputs are available.
+
+A. TWO-STAGE TRAINING AND THE TARGET UPDATE
+
+Use a simple annotated diagram:
+
+    0 --Pretraining: k steps--> w_k
+      --Fine-tuning: ell steps--> w'_ell
+
+Show the shared constraint:
+
+    c_p k + c_f ell = B.
+
+Then distinguish, with two short labelled expressions:
+
+    Achieved update: Delta_{k,ell} = w'_ell - w_k
+    Ideal update:   Delta = w_hat_prime - w_hat
+
+Keep the notation visually connected to the diagram, especially the
+fact that the achieved update starts at w_k.
+
+Explain in the caption that w_hat and w_hat_prime are the optima of
+the two fixed empirical objectives.
+
+Do not expand both ridge objectives inside the figure. Their formulas
+belong in the thesis text or implementation, not in a crowded diagram.
+
+Do not draw an invented parameter-space GD trajectory. The arrows here
+describe stages of the procedure, not computed paths between coordinates.
+
+Do not give the two stage arrows numerical lengths that imply an
+unlabelled 50:50 allocation.
+
+B AND C. NUMERICAL ALLOCATION CURVES
+
+Use the two specified cases from the existing experiment.
+
+Panel titles should be neutral and explicit, for example:
+
+    B  n = 80, n' = 320
+    C  n = 320, n' = 80
+
+Define n and n' as the pretraining and fine-tuning sample sizes in
+the caption.
+
+Horizontal axis:
+
+    “Compute spent on pretraining (%)”
+
+The coordinate is:
+
+    100*c_p*k/B,
+
+NOT 100*k/(k+ell), because the two iteration costs can differ.
+
+Vertical axis:
+
+    “Squared update error”
+
+Include the mathematical expression ||Delta_{k,ell}-Delta||^2_{H'}
+as part of the shared axis label or a short nearby annotation.
+
+Use a logarithmic vertical axis with powers-of-ten tick labels.
+Show the original positive errors, without normalising each curve
+by its minimum.
+
+Use the same horizontal range 0–100% in both plots.
+Use common vertical limits for the two selected cases so their
+error scales remain transparent.
+
+For each plot:
+- Draw the actual numerical update-error curve.
+- Mark the best feasible allocation with a clearly visible point.
+- Add a light dashed vertical guide from its horizontal coordinate.
+- Give the computed percentage of pretraining compute in a short label,
+  positioned without overlapping the curve.
+- Calculate this percentage from the numerical minimiser. Do not
+  hard-code an approximate theoretical fraction.
+
+The endpoints correspond to:
+- 0%: fine-tuning only, from zero.
+- 100%: pretraining only, with no fine-tuning update.
+
+Explain this in the caption rather than adding long endpoint labels
+that crowd the axes.
+
+SIMPLIFY RELATIVE TO FIGURE 4.1
+
+Remove:
+- the Lanczos-estimate marker;
+- the two-term theoretical prediction marker;
+- the expression theta* T + s*;
+- spectral decompositions and bottleneck formulas from the artwork.
+
+Retain only the numerical curve and the numerical optimum.
+
+The detailed theoretical and estimation comparisons already appear
+in the research chapter. This introduction figure should explain
+the problem and show why the split matters.
+
+NUMERICAL EVALUATION
+
+Prefer the existing stable implementation and saved objective values.
+
+If recomputation is necessary, use the exact closed-form GD dynamics:
+
+    C  = I - eta*H
+    C' = I - eta'*H'
+
+    w_k = (I - C^k) w_hat
+
+    w'_ell = w_hat_prime + (C')^ell (w_k - w_hat_prime).
+
+For accurate evaluation near convergence, use the residual identity:
+
+    Delta_{k,ell} - Delta
+      = [I - (C')^ell] C^k w_hat - (C')^ell Delta.
+
+Do not evaluate tiny errors primarily by subtracting fully converged
+parameter vectors. That can introduce cancellation and a false
+floating-point error floor.
+
+Preserve the existing thin-SVD or equivalent stable spectral treatment.
+In particular, do not introduce spurious components of w_hat in the
+kernel of X through numerical round-off and then allow those components
+to dominate the asymptotic residual.
+
+Use exponential rescaling and log-domain calculations where needed,
+as in the original experiment.
+
+Do not floor small positive errors to an arbitrary constant to make
+the plot easier. Do not smooth the curves into an assumed U or V shape.
+
+FEASIBLE ALLOCATIONS
+
+Retain the chapter’s exact-budget convention:
+
+    L = lcm(c_p, c_f)
+    T = B/L
+
+    t = 0, ..., T
+    k(t)   = (L/c_p)*t
+    ell(t) = (L/c_f)*(T-t).
+
+Check that all iteration counts are integers and all schedules use
+exactly B units of compute.
+
+Plot the error against 100*t/T and obtain the optimum by searching
+all feasible allocations, unless the original saved results already
+provide this calculation.
+
+CHECKS BEFORE FINALISING
+
+Verify:
+
+1. Every plotted schedule obeys the same budget constraint.
+
+2. Both selected panels preserve the original experiment’s data
+   and parameters.
+
+3. For moderate iteration counts, the stable residual calculation
+   agrees with direct GD or direct evaluation of the iterates.
+
+4. With ell = 0, the achieved update is zero and the squared update
+   error is ||Delta||^2_{H'}.
+
+5. With k = 0, the residual equals:
+
+       w_hat - (C')^ell w_hat_prime.
+
+6. The plotted optimum agrees with the minimum of the full numerical
+   objective array.
+
+7. No minimum is caused by underflow, arbitrary clipping, or an
+   accidentally introduced numerical error floor.
+
+INTERPRETATION
+
+The two panels are fixed numerical examples, not averages over
+repeated datasets. Do not invent confidence bands.
+
+Changing sample sizes in this experiment changes BOTH the empirical
+objectives and the per-iteration costs. Do not attribute the shift
+in the optimum solely to costs, and do not present a general rule
+that larger pretraining datasets always require a larger fraction
+of compute.
+
+Also, do not explain the reason for switching as “avoiding overfitting”.
+Here, the question concerns approximating a fixed empirical update
+under limited computation.
+
+PRESENTATION AND OUTPUTS
+
+Use reproducible Python plotting code with NumPy/Matplotlib and the
+repository’s existing numerical utilities where appropriate.
+
+Use:
+- serif mathematical typography compatible with the thesis;
+- bold notation for vectors;
+- short, plain labels;
+- readable text at the thesis’s actual text width;
+- restrained colours and distinguishable line/marker styles;
+- capitalisation after colons in titles.
+
+Keep detailed explanations in the caption, not in the artwork.
+Avoid a dense flowchart or a large legend.
+
+Save everything in a new, non-overwriting subfolder for introduction
+illustrations. Do not modify the original experiment, original figure,
+or thesis text.
+
+Provide:
+- the plotting script;
+- a vector PDF and SVG;
+- a high-resolution PNG preview;
+- a concise LaTeX-ready caption of approximately 100–140 words;
+- a LaTeX figure-insertion snippet;
+- a short record of the source script/data used, the checks performed,
+  and the numerical optimal percentages.
+
+The caption should identify the diagram as schematic, the curves as
+numerical evaluations of full-batch GD, the common total budget, the
+update-error criterion, and the two dataset-size configurations.
+Refer to the research chapter for the full experimental details.
+
+Run the script and inspect the rendered result at its intended
+insertion size. Fix overlaps, cramped labels, and excessive whitespace
+before returning the final files.
